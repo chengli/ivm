@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title Here</title>
+        <style type="text/css" media="screen">@import "css/jqtouch.css";</style>
+        <style type="text/css" media="screen">@import "css/themes/jqt/theme.css";</style>
+        <script src="js/jquery-1.4.2.min.js"charset="utf-8"></script>
+        <script src="js/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+            var jQT = new $.jQTouch({
+                icon: 'jqtouch.png',
+                addGlossToIcon: false,
+                startupScreen: 'jqt_startup.png',
+                statusBar: 'black',
+                preloadImages: [
+                    'css/themes/jqt/img/back_button.png',
+                    'css/themes/jqt/img/back_button_clicked.png',
+                    'css/themes/jqt/img/button_clicked.png',
+                    'css/themes/jqt/img/grayButton.png',
+                    'css/themes/jqt/img/whiteButton.png',
+                    'css/themes/jqt/img/loading.gif'
+                    ]
+            });
+            // Some sample Javascript functions:
+            $(function(){
+                // Show a swipe event on swipe test
+                $('#swipeme').swipe(function(evt, data) {                
+                    $(this).html('You swiped <strong>' + data.direction + '</strong>!');
+                });
+                $('a[target="_blank"]').click(function() {
+                    if (confirm('This link opens in a new window.')) {
+                        return true;
+                    } else {
+                        $(this).removeClass('active');
+                        return false;
+                    }
+                });
+                // Page animation callback events
+                $('#pageevents').
+                    bind('pageAnimationStart', function(e, info){ 
+                        $(this).find('.info').append('Started animating ' + info.direction + '&hellip; ');
+                    }).
+                    bind('pageAnimationEnd', function(e, info){
+                        $(this).find('.info').append(' finished animating ' + info.direction + '.<br /><br />');
+                    });
+                // Page animations end with AJAX callback event, example 1 (load remote HTML only first time)
+                $('#callback').bind('pageAnimationEnd', function(e, info){
+                    if (!$(this).data('loaded')) {                      // Make sure the data hasn't already been loaded (we'll set 'loaded' to true a couple lines further down)
+                        $(this).append($('<div>Loading</div>').         // Append a placeholder in case the remote HTML takes its sweet time making it back
+                            load('ajax.html .info', function() {        // Overwrite the "Loading" placeholder text with the remote HTML
+                                $(this).parent().data('loaded', true);  // Set the 'loaded' var to true so we know not to re-load the HTML next time the #callback div animation ends
+                            }));
+                    }
+                });
+                // Orientation callback event
+                $('body').bind('turn', function(e, data){
+                    $('#orient').html('Orientation: ' + data.orientation);
+                });
+            });
+        </script>
+        <style type="text/css" media="screen">
+            body.fullscreen #home .info {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+		<div id="home" class="current">
+		<div class="toolbar"><h1>InfoValue Mobile</h1></div>
+			<ul class="rounded">
+				<li class="arrow"><a href="#">Hotel Information</a></li>
+				<li class="arrow"><a href="#">Guest Services</a></li>
+				<li class="arrow"><a href="#QVOD">Tv Entertainment</a></li>
+			</ul>
+		
+		</div>
+		<ul id="QVOD" class="individual">
+			<div class="toolbar">
+				<h1>TV Entertainment</h1>
+				<a class="back" href="#">Back</a>
+			</div>
+			<li>
+				<a href="#">隨選視訊</a>
+			</li>	
+			<li>
+				<a href="#">現場直播</a>
+			</li>
+		</ul>
+    </body>
+</html>
